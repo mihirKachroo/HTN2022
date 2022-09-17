@@ -1,131 +1,160 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import 'package:motor_flutter/motor_flutter.dart';
 import 'package:get/get.dart';
 import 'package:motor_flutter/motor_flutter.dart';
-import 'login_page.dart'; // <-- this is the new line
-
 
 Future<void> main() async {
-  // Don't worry about this line just yet
+  // Init Services
   WidgetsFlutterBinding.ensureInitialized();
-  // handle the motor initialization response
-  void handleMotorInitResponse(InitializeResponse? response) {
-    if (response != null) {
-      print('Motor initialized');
-      print(response);
-    }
-  }
-
-  MotorFlutter motor = // <-- this is the important line
-      Get.put(MotorFlutter(), permanent: true); // <-- this is the important line
-  motor.init(handleMotorInitResponse); // <-- this is the important line
-
-  runApp(const MyApp()); // <-- Added const here to keep vs code happy
+  await MotorFlutter.init();
+  runApp(const MyApp());
 }
 
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
+class _MyAppState extends State<MyApp> {
+  late final WhoIs? whoIs;
+  late final SchemaDefinition? testSchema;
+  late final SchemaDocument? testDocument;
+  late final List<int>? dscKey;
+  late final List<int>? pskKey;
+  String titleMsg = "Unauthorized";
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
+    return MaterialApp(
+      title: 'Motor Flutter Example',
       theme: ThemeData(
-        // This is the theme ...
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(title: 'Flutter Demo Home Page'), // <-- this is the changed line
-    );
-  }
-}
-
-
-
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(titleMsg),
+          leading: IconButton(
+            icon: const Icon(Icons.account_circle_rounded),
+            //
+            // 1. Register a new account
+            //
+            onPressed: () async {
+              // When running your application in Debug mode the device keychain is unavailble in the Simulator.
+              // We have provided a callback which returns your dsc and psk for storing your keys securely.
+              // The Sonr team reccomends either of the following packages to store your keys:
+              // - [biometric_storage] https://pub.dev/packages/biometric_storage
+              // - [flutter_keychain] https://pub.dev/packages/flutter_keychain
+              final res = await MotorFlutter.to.createAccount("hard-to-hack-password", onKeysGenerated: (dsc, psk) {
+                dscKey = dsc;
+                pskKey = psk;
+              });
+              whoIs = res;
+            },
+          ),
+          actions: [
+            IconButton(
+                //
+                // 2. Login to new account
+                //
+                onPressed: () async {
+                  // This line is unnecessary it is the Developers Job to provide a UI
+                  // to be able to input Password, and Account Address. In production mode
+                  // the dscKey and pskKey are stored by the motor_flutter plugin in the device
+                  // keychain.
+                  if (whoIs == null) {
+                    Get.snackbar("Error", "WhoIs Field has not been set");
+                    return;
+                  }
+                  final res = await MotorFlutter.to.login(
+                    password: "hard-to-hack-password",
+                    address: whoIs!.owner,
+                    dscKey: dscKey,
+                    pskKey: pskKey,
+                  );
+                  whoIs = res;
+                  Get.snackbar("Error", "Failed to login user");
+                  return;
+                },
+                icon: const Icon(Icons.login))
+          ],
+        ),
+        body: Column(
+          children: [
+            //
+            // 3. Try creating a Schema
+            //
+            MaterialButton(
+              child: const Text("New Example Schema"),
+              onPressed: () async {
+                // Set the label, followed by a map with the property name and the
+                // associated primitive type.
+                final res = await MotorFlutter.to.createSchema(
+                    "Profile",
+                    Map<String, SchemaKind>.from({
+                      "name": SchemaKind.STRING,
+                      "age": SchemaKind.INT,
+                      "height": SchemaKind.FLOAT,
+                    }));
+                testSchema = res.schemaDefinition;
+              },
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            //
+            // 4. Lets build a Document from that schema
+            //
+            MaterialButton(
+              child: const Text("Build Document from Schema"),
+              onPressed: () async {
+                if (testSchema == null) {
+                  Get.snackbar(
+                    "Error",
+                    "Failed to create schema",
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                  );
+                  return;
+                }
+
+                testDocument = testSchema?.newDocument();
+                testDocument!.set<String>("name", "Todd");
+                testDocument!.set<int>("age", 24);
+                testDocument!.set<double>("height", 5.11);
+              },
+            ),
+
+            //
+            // 5. Upload Document to App-Specific Data Store
+            //
+            MaterialButton(
+              child: const Text("Upload Document to User Data Store"),
+              onPressed: () async {
+                if (testDocument == null) {
+                  Get.snackbar(
+                    "Error",
+                    "Failed to find testDocument",
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                  );
+                  return;
+                }
+
+                final doc = await testDocument?.save("hello-flutter");
+                if (doc == null) {
+                  Get.snackbar(
+                    "Error",
+                    "Failed to Upload testDocument",
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                  );
+                  return;
+                }
+                Get.snackbar("Success", "Uploaded document to user encrypted IPFS Store. CID: ${doc.cid}");
+              },
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
