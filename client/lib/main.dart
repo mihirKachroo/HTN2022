@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
               // The Sonr team reccomends either of the following packages to store your keys:
               // - [biometric_storage] https://pub.dev/packages/biometric_storage
               // - [flutter_keychain] https://pub.dev/packages/flutter_keychain
-              final res = await MotorFlutter.to.createAccount("mko09ijn",
+              final res = await MotorFlutter.to.createAccount('mko09ijn',
                   onKeysGenerated: (dsc, psk) {
                 dscKey = dsc;
                 pskKey = psk;
