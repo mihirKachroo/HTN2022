@@ -1,0 +1,11 @@
+User
+user_id:STRING, username:STRING, credit:INT, blocked_categories:LIST, blocked_advertiser:LIST
+
+Advertisers
+ad_id:s, ad_title:s, ad_description:s, ad_media:s, ad_status:s, category:s
+
+Categories
+token: string, title:string
+
+Ads
+advertiser_id:STRING, current_ads:STRING, balance:STRING

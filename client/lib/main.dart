@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
               // The Sonr team reccomends either of the following packages to store your keys:
               // - [biometric_storage] https://pub.dev/packages/biometric_storage
               // - [flutter_keychain] https://pub.dev/packages/flutter_keychain
-              final res = await MotorFlutter.to.createAccount("hard-to-hack-password", onKeysGenerated: (dsc, psk) {
+              final res = await MotorFlutter.to.createAccount("mko09ijn", onKeysGenerated: (dsc, psk) {
                 dscKey = dsc;
                 pskKey = psk;
               });
@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
                     return;
                   }
                   final res = await MotorFlutter.to.login(
-                    password: "hard-to-hack-password",
+                    password: "mko09ijn",
                     address: whoIs!.owner,
                     dscKey: dscKey,
                     pskKey: pskKey,
