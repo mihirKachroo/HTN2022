@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:motor_flutter/motor_flutter.dart';
+import 'login_page.dart';
 
 Future<void> main() async {
   // Init Services
@@ -24,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   late final SchemaDocument? testDocument;
   late final List<int>? dscKey;
   late final List<int>? pskKey;
-  String titleMsg = "Unauthorized";
+  String titleMsg = "DATS";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,7 +47,8 @@ class _MyAppState extends State<MyApp> {
               // The Sonr team reccomends either of the following packages to store your keys:
               // - [biometric_storage] https://pub.dev/packages/biometric_storage
               // - [flutter_keychain] https://pub.dev/packages/flutter_keychain
-              final res = await MotorFlutter.to.createAccount("hard-to-hack-password", onKeysGenerated: (dsc, psk) {
+              final res = await MotorFlutter.to.createAccount(
+                  "hard-to-hack-password", onKeysGenerated: (dsc, psk) {
                 dscKey = dsc;
                 pskKey = psk;
               });
@@ -149,7 +151,8 @@ class _MyAppState extends State<MyApp> {
                   );
                   return;
                 }
-                Get.snackbar("Success", "Uploaded document to user encrypted IPFS Store. CID: ${doc.cid}");
+                Get.snackbar("Success",
+                    "Uploaded document to user encrypted IPFS Store. CID: ${doc.cid}");
               },
             ),
           ],
