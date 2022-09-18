@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SizedBox(height: 10.0),
                     Text(
-                      "\$3,020.09",
+                      "\$159.06 CAD",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 32.0,
@@ -70,9 +70,9 @@ class _HomePageState extends State<HomePage> {
                         const Color(0xFFf3a8b0),
                         const Color(0xFFc088d6)
                       ],
-                      text: "Litecoin",
-                      coins: "14.3910 LCT",
-                      dollars: "\$915.39",
+                      text: "Sonr Tokens",
+                      coins: "23.6 SNR",
+                      dollars: "\$86.67",
                     ),
                     SizedBox(width: 10.0),
                     CardWidget(
@@ -82,9 +82,9 @@ class _HomePageState extends State<HomePage> {
                         const Color(0xFFadf6de),
                         const Color(0xFF6eead2)
                       ],
-                      text: "Ripple",
-                      coins: "3001.2301 XRP",
-                      dollars: "\$759.34",
+                      text: "AttCoin",
+                      coins: "79.05 ACN",
+                      dollars: "\$72.39",
                     )
                   ],
                 ),
@@ -130,8 +130,8 @@ class _HomePageState extends State<HomePage> {
                   TransterHistorWidget(
                       iconData: LineAwesomeIcons.download,
                       text: "Received",
-                      date: "15 Aug",
-                      coins: "0.0002 LTC",
+                      date: "15 Sept",
+                      coins: "0.0002 SNR",
                       dollars: "\$1.49",
                       color: Colors.green[400]),
                   SizedBox(height: 20.0),
@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                     iconData: LineAwesomeIcons.upload,
                     text: "Sent",
                     date: "13 Aug",
-                    coins: "-0.0004 LTC",
+                    coins: "-0.005 LTC",
                     dollars: "-\$2.98",
                     color: Colors.pink[400],
                   ),
