@@ -10,9 +10,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var balance1 = 86.67;
-  var balance2 = 72.39;
-  // var balance = balance1 + balance2;
+  final sonrBalance = 86.67;
+  final attBalance = 72.39;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SizedBox(height: 10.0),
                     Text(
-                      "\$159.06 CAD",
+                      "\$" + "${sonrBalance + attBalance}",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 32.0,
@@ -76,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                       text: "Sonr Tokens",
                       coins: "23.6 SNR",
-                      dollars: "\$" + "${balance1}",
+                      dollars: "\$" + "${sonrBalance}",
                     ),
                     SizedBox(width: 10.0),
                     CardWidget(
@@ -88,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                       text: "AttCoin",
                       coins: "79.05 ACN",
-                      dollars: "\$" + "${balance2}",
+                      dollars: "\$" + "${attBalance}",
                     )
                   ],
                 ),
