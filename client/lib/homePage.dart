@@ -9,11 +9,33 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+enum Menu { itemOne, itemTwo, itemThree }
+
 class _HomePageState extends State<HomePage> {
   final sonrBalance = 86.67;
   final attBalance = 72.39;
+  // showPopupMenu() {
+  //   showMenu<String>(
+  //     context: context,
+  //     position: RelativeRect.fromLTRB(5.0, 5.0, 0.0,
+  //         0.0), //position where you want to show the menu on screen
+  //     items: [
+  //       PopupMenuItem<String>(child: const Text('Your Info'), value: '1'),
+  //     ],
+  //     elevation: 8.0,
+  //   ).then<void>((String itemSelected) {
+  //     if (itemSelected == null) return;
+
+  //     if (itemSelected == "Your Info") {
+  //       //code here
+  //     } else {
+  //       //code here
+  //     }
+  //   });
+  // }
 
   @override
+  String _selectedMenu = '';
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF131313),
@@ -21,13 +43,27 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color(0xFF131313),
         elevation: 0.0,
         actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: Icon(
-              Icons.more_horiz,
-              size: 40.0,
-            ),
-          ),
+          PopupMenuButton<Menu>(
+              // Callback that sets the selected popup menu item.
+              onSelected: (Menu item) {
+                setState(() {
+                  _selectedMenu = item.name;
+                });
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
+                    const PopupMenuItem<Menu>(
+                      value: Menu.itemOne,
+                      child: Text('Your Info'),
+                    ),
+                    const PopupMenuItem<Menu>(
+                      value: Menu.itemTwo,
+                      child: Text('Ads Dashboard'),
+                    ),
+                    const PopupMenuItem<Menu>(
+                      value: Menu.itemThree,
+                      child: Text('Permissions'),
+                    ),
+                  ]),
         ],
       ),
       body: SingleChildScrollView(
@@ -70,8 +106,8 @@ class _HomePageState extends State<HomePage> {
                       gradientBegin: Alignment.topLeft,
                       gradiendEnd: Alignment.bottomRight,
                       colors: [
-                        const Color(0xFFf3a8b0),
-                        const Color(0xFFc088d6)
+                        Color.fromARGB(255, 235, 137, 147),
+                        Color.fromARGB(255, 137, 85, 157)
                       ],
                       text: "Sonr Tokens",
                       coins: "23.6 SNR",
@@ -82,8 +118,8 @@ class _HomePageState extends State<HomePage> {
                       gradientBegin: Alignment.topLeft,
                       gradiendEnd: Alignment.bottomLeft,
                       colors: [
-                        const Color(0xFFadf6de),
-                        const Color(0xFF6eead2)
+                        Color.fromARGB(255, 84, 210, 168),
+                        Color.fromARGB(255, 11, 109, 90)
                       ],
                       text: "AttCoin",
                       coins: "79.05 ACN",
