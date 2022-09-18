@@ -1,14 +1,4 @@
-# d-Adv
-Utilizing Sonr Schema user data to empower and reward advertisement decentralization
+# SONR rADar
+Utilizing Sonr Schema user data to empower and reward advertisement decentralization. You can find our Devpost here!
 
-# Background
-
-# Problem Statement
-
-# Product Description
-
-# Target Audience
-
-# Technology Used
-
-# Next Steps
+On track to be submitted to Hack The North 2022
