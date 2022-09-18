@@ -10,6 +10,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var balance1 = 86.67;
+  var balance2 = 72.39;
+  // var balance = balance1 + balance2;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                       text: "Sonr Tokens",
                       coins: "23.6 SNR",
-                      dollars: "\$86.67",
+                      dollars: "\$" + "${balance1}",
                     ),
                     SizedBox(width: 10.0),
                     CardWidget(
@@ -84,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                       text: "AttCoin",
                       coins: "79.05 ACN",
-                      dollars: "\$72.39",
+                      dollars: "\$" + "${balance2}",
                     )
                   ],
                 ),
